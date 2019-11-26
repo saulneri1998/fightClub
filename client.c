@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "sound.h"
+//#include "sound.h"
 #include <time.h>
 
 void instructionsMiniGame(){
@@ -45,7 +45,7 @@ int levelOne(){
     char randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"[random () % 26+26+10];
     color("green");
     gotoxy(24, 4);
-    printf("Random letter: %c \n", randomChar);
+    printf("TYPE: %c \n", randomChar);
     gotoxy(18, 5);
     printf("Please enter a character: ");
     c = getche();
@@ -88,7 +88,7 @@ int levelTwo(){
     char randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"[random () % 26+10];
     color("green");
     gotoxy(24, 4);
-    printf("Random letter: %c \n", randomChar);
+    printf("TYPE: %c \n", randomChar);
     gotoxy(18, 5);
     printf("Please enter a character: ");
     c = getche();
@@ -132,7 +132,7 @@ int levelThree(){
     char randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz9157"[random () % 26+26+4];
     color("green");
     gotoxy(24, 4);
-    printf("Random letter: %c \n", randomChar);
+    printf("TYPE: %c \n", randomChar);
     gotoxy(18, 5);
     printf("Please enter a character: ");
     c = getche();
@@ -176,7 +176,7 @@ int levelFour(){
     char randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'¿+}{!$/()=?¡+-.,;:_[]"[random () % 26+26+10+22];
     color("green");
     gotoxy(24, 4);
-    printf("Random letter: %c \n", randomChar);
+    printf("TYPE: %c \n", randomChar);
     gotoxy(18, 5);
     printf("Please enter a character: ");
     c = getche();
