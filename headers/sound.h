@@ -8,3 +8,7 @@ void playExplosion(){
 void playSave(){
     system("omxplayer --adev hdmi .sounds/correct.wav");
 }
+
+void playLevelComplete(){
+    system("omxplayer --adev hdmi .sounds/levelComplete.wav");
+}
