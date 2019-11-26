@@ -25,7 +25,47 @@ int gameIsFinished() {
     }
 }
 
-void printBoard(void) {
+void encodeBoard(char * m) {
+    char message[307] = "";
+    strcat(message, "Tablero");
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            char temp[3];
+            snprintf(temp, 3, ",%d", board[i][j]);
+            strcat(message, temp);
+        }
+    }
+    strcpy(m, message);
+}
+
+void decodeBoard(char * message) {
+    char *ptr = strtok(message, ",");
+    int i = 0;
+    int j = 0;
+    int cont = 0;
+
+    if (strcmp(ptr, "Tablero") == 0) {
+        ptr = strtok(NULL, ",");
+        while(ptr != NULL)
+        {
+            if (strcmp(ptr, "0") == 0) {
+                board[i][j] = 0;
+            } else if (strcmp(ptr, "1") == 0) {
+                board[i][j] = 1;
+            } else if (strcmp(ptr, "2") == 0) {
+                board[i][j] = 2;
+            } else if (strcmp(ptr, "3") == 0) {
+                board[i][j] = 3;
+            }
+            ptr = strtok(NULL, ",");
+            cont++;
+            i = cont / 10;
+            j = cont % 10;
+        }
+    }
+}
+
+void printClientBoard(void) {
     clrscr();
     gotoxy(50, 10);
     color("blue");
