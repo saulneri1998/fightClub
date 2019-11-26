@@ -1,6 +1,7 @@
 int board[10][10];
+int board2[10][10];
 int attempts;
-int foundPalces;
+int foundPlaces;
 
 void initBoard(void) {
     for (int i = 0; i < 10; i++) {
@@ -9,14 +10,14 @@ void initBoard(void) {
         }
     }
     attempts = 50;
-    foundPalces = 0;
+    foundPlaces = 0;
 }
 
 int gameIsFinished() {
     if (attempts <= 0) {
         // perido el cliente
         return 1;
-    } else if (foundPalces == 20) {
+    } else if (foundPlaces == 20) {
         // perido el server
         return 2;
     } else {
@@ -46,8 +47,7 @@ void decodeBoard(char * message) {
 
     if (strcmp(ptr, "Tablero") == 0) {
         ptr = strtok(NULL, ",");
-        while(ptr != NULL)
-        {
+        while(ptr != NULL) {
             if (strcmp(ptr, "0") == 0) {
                 board[i][j] = 0;
             } else if (strcmp(ptr, "1") == 0) {
@@ -65,7 +65,46 @@ void decodeBoard(char * message) {
     }
 }
 
-void printClientBoard(void) {
+void decodeBoard2(char * message) {
+    char *ptr = strtok(message, ",");
+    int i = 0;
+    int j = 0;
+    int cont = 0;
+
+    if (strcmp(ptr, "Tablero") == 0) {
+        ptr = strtok(NULL, ",");
+        while(ptr != NULL) {
+            if (strcmp(ptr, "0") == 0) {
+                board2[i][j] = 0;
+            } else if (strcmp(ptr, "1") == 0) {
+                board2[i][j] = 1;
+            } else if (strcmp(ptr, "2") == 0) {
+                board2[i][j] = 2;
+            } else if (strcmp(ptr, "3") == 0) {
+                board2[i][j] = 3;
+            }
+            ptr = strtok(NULL, ",");
+            cont++;
+            i = cont / 10;
+            j = cont % 10;
+        }
+    }
+}
+
+int compareBoards(void) {
+    int iguales = 0;
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            if (board[i][j] == board2[i][j]) {
+                iguales = 1;
+                break;
+            }
+        }
+    }
+    return iguales;
+}
+
+void printClientBoard(int x, int y) {
     clrscr();
     gotoxy(50, 10);
     color("blue");
@@ -78,15 +117,20 @@ void printClientBoard(void) {
         for (int j = 0; j < 10; j++) {
             color("reset");
             printf("| ");
-            if (board[i][j] == 0 || board[i][j] == 1) {
-                color("reset");
-                printf(" ");
-            } else if (board[i][j] == 2) {
-                color("red");
-                printf("+");
-            } else if (board[i][j] == 3) {
-                color("cyan");
+            if (x == j && y == i) {
+                color("yellow");
                 printf("-");
+            } else {
+                if (board[i][j] == 0 || board[i][j] == 1) {
+                    color("reset");
+                    printf(" ");
+                } else if (board[i][j] == 2) {
+                    color("red");
+                    printf("+");
+                } else if (board[i][j] == 3) {
+                    color("cyan");
+                    printf("-");
+                }
             }
             printf(" ");
             color("reset");
@@ -104,16 +148,18 @@ void printSettingBoard(int x, int y, int b) {
     if (b > 0) {
         gotoxy(50, 9);
         color("blue");
-        printf("Use arrow keys to move the buildings");
+        printf("Si eres server intenta acomodarlos para intrceptar las del enemigo");
         gotoxy(50, 10);
-        printf("Type 's' twiceto set the location");
+        printf("Si eres cliente intenta acomodarlo para esquivar a tu enemigo");
         gotoxy(50, 12);
         color("magenta");
-        printf("You need to set %d more buildings", b);
+        printf("Nescesitas poner otros %d edificios", b);
     } else {
         gotoxy(50, 9);
         color("blue");
-        printf("You've set all buildings");
+        printf("Si eres server intenta acomodarlos para intrceptar las del enemigo");
+        gotoxy(50, 10);
+        printf("Si eres cliente intenta acomodarlo para esquivar a tu enemigo");
         gotoxy(50, 12);
         color("magenta");
         printf("Waiting for oponent");

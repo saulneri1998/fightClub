@@ -16,6 +16,19 @@ int levelThree(void);
 int levelFour(void);
 void playMiniGame(void);
 
+void explosionArt(){
+	clrscr();
+	int c;
+	FILE *file;
+	file = fopen("asciiart/explosion.txt", "r");
+	if (file) {
+		while ((c = getc(file)) != EOF)
+			putchar(c);
+		fclose(file);
+	}
+	sleep(1);
+}
+
 int main(void) {
     int descriptor_socket , nuevo_socket , c;
     struct sockaddr_in server , client;
@@ -60,13 +73,11 @@ int main(void) {
     c = sizeof(struct sockaddr_in);
     while((nuevo_socket = accept(descriptor_socket, 
         (struct sockaddr *)&client, (socklen_t*)&c))) {
-
         printSettingBoard(0,0,0);
         /*
         ACEPTA CONEXIONES
         */
         // puts("ESPERANDO nueva CONEXION: ");
-        c = sizeof(struct sockaddr_in);
         
         if (nuevo_socket < 0)
         {
@@ -75,16 +86,25 @@ int main(void) {
         }
 
         // puts("CONEXION ACEPTADA");
+
         char mensaje_cliente[2000];
-        if(recv(nuevo_socket, mensaje_cliente, 2000, 0) < 0){
+        char b[307];
+            
+        if(recv(nuevo_socket, b, 307, 0) < 0){
             puts("Error en el mensaje cliente");
             return -1;
         }
-
-        if (strcmp(mensaje_cliente, "ClientReady") == 0) {
-            char b[307];
-            encodeBoard(b);
-            write(nuevo_socket , mensaje , strlen(mensaje));
+        //printf("%s\n", b);
+        decodeBoard2(b);
+        int i = compareBoards();
+        if (i == 0) {
+            write(nuevo_socket , "P" , 1);
+            printf("Ganaste\n");
+        } else {
+            write(nuevo_socket , "G" , 1);
+            printf("Perdiste\n");
+            playExplosion();
+            explosionArt();
         }
     }
 
