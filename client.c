@@ -11,7 +11,7 @@ void instructionsMiniGame(){
   printf("TYPE AS MANY CHARACTERS AS YOU CAN \n");
   sleep(2);
   gotoxy(10, 3);
-  printf("DON'T DO ENTER. JUST TYPE THE CHAR\n");
+  printf("DON'T TYPE ENTER. JUST TYPE THE CHARACTER SHOWN\n");
   sleep(2);
   gotoxy(24, 4);
   printf("3...\n");

@@ -58,11 +58,26 @@ void printBoard(void) {
     printf("-----------------------------------------\n");
 }
 
-void printSettingBoard(int x, int y) {
+void printSettingBoard(int x, int y, int b) {
     clrscr();
-    gotoxy(50, 10);
-    color("blue");
-    printf("Usa las flechas para mover el edificio, usa la tecla 's' para colocarlo");
+
+    if (b > 0) {
+        gotoxy(50, 9);
+        color("blue");
+        printf("Use arrow keys to move the buildings");
+        gotoxy(50, 10);
+        printf("Type 's' twiceto set the location");
+        gotoxy(50, 12);
+        color("magenta");
+        printf("You need to set %d more buildings", b);
+    } else {
+        gotoxy(50, 9);
+        color("blue");
+        printf("You've set all buildings");
+        gotoxy(50, 12);
+        color("magenta");
+        printf("Waiting for oponent");
+    }
 
     gotoxy(0, 0);
     color("reset");
@@ -71,25 +86,25 @@ void printSettingBoard(int x, int y) {
         for (int j = 0; j < 10; j++) {
             color("reset");
             printf("| ");
-            if (board[i][j] == 0) {
-                color("reset");
-                printf(" ");
-            } else if (board[i][j] == 1) {
-                color("green");
-                printf("+");
+            if (x == j && y == i && b > 0) {
+                color("yellow");
+                printf("-");
+            } else if (x+1 == j && y == i && b > 0) {
+                color("yellow");
+                printf("-");
+            } else if (x == j && y+1 == i && b > 0) {
+                color("yellow");
+                printf("-");
+            } else if (x+1 == j && y+1 == i && b > 0) {
+                color("yellow");
+                printf("-");
             } else {
-                if (x == i && y == j) {
-                    color("yellow");
-                    printf("-");
-                } else if (x+1 == i && y == j) {
-                    color("yellow");
-                    printf("-");
-                } else if (x == i && y+1 == j) {
-                    color("yellow");
-                    printf("-");
-                } else if (x+1 == i && y+1 == j) {
-                    color("yellow");
-                    printf("-");
+                if (board[i][j] == 0) {
+                    color("reset");
+                    printf(" ");
+                } else if (board[i][j] == 1) {
+                    color("green");
+                    printf("+");
                 }
             }
             printf(" ");
@@ -102,7 +117,7 @@ void printSettingBoard(int x, int y) {
     printf("-----------------------------------------\n");
 }
 
-int setBuilding(int x, int y) {
+int setBuilding(int y, int x) {
     if (x < 9 && y < 9) {
         if (board[x][y] == 0 && board[x+1][y] == 0 && 
         board[x][y+1] == 0 && board[x+1][y+1] == 0) {
