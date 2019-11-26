@@ -1,5 +1,5 @@
 #include "screen.h"
-//#include "sound.h"
+#include "sound.h"
 #include <time.h>
 
 void instructionsMiniGame(){
