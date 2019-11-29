@@ -3,23 +3,14 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <pthread.h> 
 #include "headers/screen.h"
 #include "headers/sound.h"
 #include "headers/board.h"
 
 void setBoard(void);
-void explosionArt(){
-	clrscr();
-	int c;
-	FILE *file;
-	file = fopen("asciiart/explosion.txt", "r");
-	if (file) {
-		while ((c = getc(file)) != EOF)
-			putchar(c);
-		fclose(file);
-	}
-	sleep(1);
-}
+void* explosionArt(void *vargp);
+void* prendeleds(void *vargp);
 
 int main(void) {
     int descriptor_socket;
@@ -46,8 +37,6 @@ int main(void) {
         puts("ERROR de conexión con el server");
         return 1;
     }
-
-    puts("CONNECTADO... PUM!\n");
     
     setBoard();
     char b[307];
@@ -70,13 +59,20 @@ int main(void) {
     if (recv(descriptor_socket, respuesta_server, strlen(respuesta_server), 0) < 0) {
         printf("FALLA EN LA RECEPCION");
     }
-    //printf("DATOS RECIBIDOS\n");
-    if (strcmp(respuesta_server, "G") == 0) {
+    if (respuesta_server[0] == 'G') {
         printf("Ganaste\n");
+        return 0;
     } else {
         printf("Perdiste\n");
-        playExplosion();
-        explosionArt();
+        
+        pthread_t hilo_leds, hilo_ascii, hilo_sound;
+        pthread_create(&hilo_leds, NULL, prendeleds, NULL);
+        pthread_create(&hilo_ascii, NULL, explosionArt, NULL);
+        pthread_create(&hilo_sound, NULL, playExplosion, NULL);
+        pthread_join(hilo_leds, NULL);
+        pthread_join(hilo_ascii, NULL);
+        pthread_join(hilo_sound, NULL);
+        return 0;
     }
 
     return 0;
@@ -125,41 +121,53 @@ void setBoard(void) {
     return;
 }
 
-void setPos(int* mx, int* my) {
-    int x = 0;
-    int y = 0;
-    int set = 0;
-    while (set == 0) {
-        printClientBoard(x, y);
-        if (getch() == '\033') { // if the first value is esc
-            getch(); // skip the [
-            switch(getch()) { // the real value
-                case 'A':
-                    // code for arrow up
-                    if (y > 0)
-                        y--;
-                    break;
-                case 'B':
-                    // code for arrow down
-                    if (y < 8)
-                        y++;
-                    break;
-                case 'C':
-                    // code for arrow right
-                    if (x < 8)
-                        x++;
-                    break;
-                case 'D':
-                    // code for arrow left
-                    if (x > 0)
-                        x--;
-                    break;
-            }
-        } else if (getch() == 's') {
-            set = 1;
-            *mx = x;
-            *my = y;
-        }
-    }
-    return;
+
+void* explosionArt(void *vargp) {
+	clrscr();
+	int c;
+	FILE *file;
+	file = fopen("asciiart/explosion.txt", "r");
+	if (file) {
+		while ((c = getc(file)) != EOF)
+			putchar(c);
+		fclose(file);
+	}
+	sleep(3);
+}
+
+void* prendeleds(void *vargp) {
+    digitalWrite(0, HIGH);
+    digitalWrite(1, HIGH);
+    digitalWrite(6, HIGH);
+    delay(200);
+    digitalWrite(0, LOW);
+    digitalWrite(1, LOW);
+    digitalWrite(6, LOW);
+    delay(200);
+    digitalWrite(0, HIGH);
+    digitalWrite(1, HIGH);
+    digitalWrite(6, HIGH);
+    delay(200);
+    digitalWrite(0, LOW);
+    digitalWrite(1, LOW);
+    digitalWrite(6, LOW);
+    delay(200);
+    digitalWrite(0, HIGH);
+    digitalWrite(1, HIGH);
+    digitalWrite(6, HIGH);
+    delay(200);
+    digitalWrite(0, LOW);
+    digitalWrite(1, LOW);
+    digitalWrite(6, LOW);
+    delay(200);
+    digitalWrite(0, HIGH);
+    digitalWrite(1, HIGH);
+    digitalWrite(6, HIGH);
+    delay(200);
+    digitalWrite(0, LOW);
+    digitalWrite(1, LOW);
+    digitalWrite(6, LOW);
+    delay(200);
+
+    return NULL;
 }

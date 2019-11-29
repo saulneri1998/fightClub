@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void playExplosion(){
+void* playExplosion(void *vargp){
     system("omxplayer --adev hdmi sounds/explosion.mp3");
+    return NULL;
 }
 
 void playSave(){

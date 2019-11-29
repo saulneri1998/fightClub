@@ -104,44 +104,6 @@ int compareBoards(void) {
     return iguales;
 }
 
-void printClientBoard(int x, int y) {
-    clrscr();
-    gotoxy(50, 10);
-    color("blue");
-    printf("Intentos: %d", attempts);
-
-    gotoxy(0, 0);
-    color("reset");
-    for (int i = 0; i < 10; i++) {
-        printf("-----------------------------------------\n");
-        for (int j = 0; j < 10; j++) {
-            color("reset");
-            printf("| ");
-            if (x == j && y == i) {
-                color("yellow");
-                printf("-");
-            } else {
-                if (board[i][j] == 0 || board[i][j] == 1) {
-                    color("reset");
-                    printf(" ");
-                } else if (board[i][j] == 2) {
-                    color("red");
-                    printf("+");
-                } else if (board[i][j] == 3) {
-                    color("cyan");
-                    printf("-");
-                }
-            }
-            printf(" ");
-            color("reset");
-            if (j == 9) {
-                printf("|\n");
-            }
-        }
-    }
-    printf("-----------------------------------------\n");
-}
-
 void printSettingBoard(int x, int y, int b) {
     clrscr();
 
@@ -220,16 +182,3 @@ int setBuilding(int y, int x) {
     }
 }
 
-int tryPos(int x, int y) {
-    if (attempts > 0 && x < 10 && y < 10) {
-        attempts--;
-        if (board[x][y] == 1) {
-            board[x][y] = 2;
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        return -1;
-    }
-}
